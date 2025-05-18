@@ -1,0 +1,48 @@
+version: '3'
+services:
+  mysql:
+    container_name: mysql-ps
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: prestashop
+    networks:
+      - prestashop_network
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sample-http.entrypoints=web"
+      - "traefik.http.routers.whoami.rule=Host(`ps-db.ael.ovh`)"
+      - "traefik.http.routers.sample-http.service=sample-http"
+      - "traefik.http.services.sample-http.loadBalancer.server.port=80"
+
+  prestashop:
+    container_name: prestashop
+    image: prestashop/prestashop:latest # Latest stable version of the PrestaShop, to see all available images go to ...
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    ports:
+      - 8082:80
+    environment:
+      DB_SERVER: mysql-ps
+      DB_NAME: prestashop
+      DB_USER: root
+      DB_PASSWD: admin
+    volumes:
+      - /var/www/modules_checkout:/var/www/html/modules/ps_checkout
+    networks:
+      - prestashop_network
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sample-http.entrypoints=web"
+      - "traefik.http.routers.whoami.rule=Host(`ps.ael.ovh`)"
+      - "traefik.http.routers.sample-http.service=sample-http"
+      - "traefik.http.services.sample-http.loadBalancer.server.port=80"
+
+networks:
+  prestashop_network:
+  proxy:
+    external: true # utilise le network externe utilisé par Traefik
