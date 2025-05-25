@@ -19,7 +19,7 @@ services:
 
   prestashop:
     container_name: prestashop
-    image: prestashop/prestashop:latest # Latest stable version of the PrestaShop, to see all available images go to ...
+    image: prestashop/prestashop:8.2.1 # Latest stable version of the PrestaShop, to see all available images go to ...
     restart: unless-stopped
     depends_on:
       - mysql
