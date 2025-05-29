@@ -15,6 +15,8 @@ services:
       - "traefik.http.routers.ael-rule.tls=true"
       - "traefik.http.routers.ael-rule.entrypoints=websecure"
       - "traefik.http.routers.ael-rule.rule=Host(`rule.ael.ovh`)"
+      - "traefik.http.routers.ael-rule.tls.domains[0].main=ael.ovh"
+      - "traefik.http.routers.ael-rule.tls.domains[0].sans=*.ael.ovh"
       - "traefik.http.routers.ael-rule.tls.certresolver=myresolver"
       - "traefik.http.services.ael-rule.loadbalancer.server.port=80"
 
