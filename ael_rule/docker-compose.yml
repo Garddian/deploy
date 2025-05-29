@@ -8,15 +8,13 @@ services:
       - NGINX_PORT=80
     volumes:
       - /var/www/html/ael-rules:/usr/share/nginx/html
-    ports:
-      - 80
     networks:
       - proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.ael-rule.entrypoints=web,websecure"
+      - "traefik.http.routers.ael-rule.tls=true"
+      - "traefik.http.routers.ael-rule.entrypoints=websecure"
       - "traefik.http.routers.ael-rule.rule=Host(`rule.ael.ovh`)"
-      - "traefik.http.routers.ael-rule.service=ael-rule"
       - "traefik.http.routers.ael-rule.tls.certresolver=myresolver"
       - "traefik.http.services.ael-rule.loadbalancer.server.port=80"
 
