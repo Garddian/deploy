@@ -5,13 +5,14 @@ ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /opt/
-COPY package.json package-lock.json ./
+COPY ./ael-api/package.json ./ael-api/package-lock.json ./
+RUN chown -R node:node ./
 RUN npm install -g node-gyp
 RUN npm config set fetch-retry-maxtimeout 600000 -g && npm install
 ENV PATH=/opt/node_modules/.bin:$PATH
 
 WORKDIR /opt/app
-COPY . .
+COPY ./ael-api .
 RUN chown -R node:node /opt/app
 USER node
 RUN ["npm", "run", "build"]
