@@ -9,22 +9,13 @@ services:
       MYSQL_DATABASE: prestashop
     networks:
       - prestashop_network
-      - proxy
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.sample-http.entrypoints=web"
-      - "traefik.http.routers.whoami.rule=Host(`ps-db.ael.ovh`)"
-      - "traefik.http.routers.sample-http.service=sample-http"
-      - "traefik.http.services.sample-http.loadBalancer.server.port=80"
 
   prestashop:
     container_name: prestashop
-    image: prestashop/prestashop:8.2.1 # Latest stable version of the PrestaShop, to see all available images go to ...
+    image: prestashop/prestashop:latest # Latest stable version of the PrestaShop, to see all available images go to ...
     restart: unless-stopped
     depends_on:
       - mysql
-    ports:
-      - 8082:80
     environment:
       DB_SERVER: mysql-ps
       DB_NAME: prestashop
@@ -35,12 +26,15 @@ services:
     networks:
       - prestashop_network
       - proxy
+    ports:
+     - 8082:80
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.sample-http.entrypoints=web"
-      - "traefik.http.routers.whoami.rule=Host(`ps.ael.ovh`)"
-      - "traefik.http.routers.sample-http.service=sample-http"
-      - "traefik.http.services.sample-http.loadBalancer.server.port=80"
+      - "traefik.http.routers.prestashop.tls=true"
+      - "traefik.http.routers.prestashop.entrypoints=websecure"
+      - "traefik.http.routers.prestashop.rule=Host(`ps.ael.ovh`)"
+      - "traefik.http.routers.prestashop.tls.certresolver=myresolver"
+      - "traefik.http.services.prestashop.loadbalancer.server.port=80"
 
 networks:
   prestashop_network:
