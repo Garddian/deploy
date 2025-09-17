@@ -21,6 +21,5 @@ services:
 
 
 networks:
-  prestashop_network:
   proxy:
     external: true # utilise le network externe utilisé par Traefik
