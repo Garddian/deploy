@@ -16,17 +16,19 @@ services:
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
       APP_KEYS: ${APP_KEYS}
       NODE_ENV: ${NODE_ENV}
-      HOST: 0.0.0.0
-    ports:
-      - "1337:1337"
+      HOST: ${HOST}
+      DOMAIN_URL: "https://api.ael.ovh"
+      PUBLIC_URL: "https://api.ael.ovh"
 
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.ael-api.tls=true"
       - "traefik.http.routers.ael-api.entrypoints=websecure"
       - "traefik.http.routers.ael-api.rule=Host(`api.ael.ovh`)"
+      - "traefik.http.routers.ael-api.tls.domains[0].main=api.ael.ovh"
       - "traefik.http.routers.ael-api.tls.certresolver=myresolver"
       - "traefik.http.services.ael-api.loadbalancer.server.port=1337"
+      - "traefik.docker.network=proxy"
     networks:
       - strapi
       - proxy
