@@ -5,16 +5,16 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    networks:
+      - proxy
     entrypoint:
       - /bin/sh
-      - -c
-    command: >
-      if [ -n "$$NGROK_DOMAIN" ]; then
-        ngrok http --domain="$$NGROK_DOMAIN" "$$FORWARD_HOST:$$FORWARD_PORT";
-      else
-        ngrok http "$$FORWARD_HOST:$$FORWARD_PORT";
-      fi
+      - /docker-entrypoint-ngrok.sh
     ports:
       - "4040:4040"
+    volumes:
+      - ./docker-entrypoint-ngrok.sh:/docker-entrypoint-ngrok.sh:ro
+
+networks:
+  proxy:
+    external: true

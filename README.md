@@ -6,17 +6,17 @@ Une stack Docker minimale est disponible dans [ngrok/docker-compose.yml](/home/g
 
 1. Copier `ngrok/.env.example` vers `ngrok/.env`
 2. Renseigner `NGROK_AUTHTOKEN`
-3. Si tu as un domaine réservé chez ngrok, renseigner `NGROK_DOMAIN`
-4. Ajuster `FORWARD_HOST` et `FORWARD_PORT` vers le service local à exposer
+3. Renseigner `NGROK_URL` avec ton URL réservée ngrok, ou laisser vide pour une URL générée automatiquement
+4. Ajuster `UPSTREAM_HOST` et `UPSTREAM_PORT` vers le service Docker à exposer
 5. Lancer `cd ngrok && docker-compose up -d`
 
 Exemple:
 
 ```env
 NGROK_AUTHTOKEN=ton_token
-NGROK_DOMAIN=mon-app.ngrok.app
-FORWARD_HOST=host.docker.internal
-FORWARD_PORT=8080
+NGROK_URL=mon-app.ngrok.app
+UPSTREAM_HOST=ael-rule
+UPSTREAM_PORT=80
 ```
 
 L'URL HTTPS sera fournie par ngrok. L'interface locale d'inspection est exposée sur `http://localhost:4040`.
